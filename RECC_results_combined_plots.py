@@ -6,11 +6,18 @@ import matplotlib.ticker as mticker
 
 # import combined results and get overview
 results = pd.read_excel("C:\\02_HIWI_Research\\04_RECC\\RECC_Results\\Combined\\RECC_results_combined.xlsx")
+df.head()
 print(results.columns)
 results.info()
 
-# import years
+# clean and explore the dataset
+results = results.drop_duplicates()
+missing_values = results.isnull().sum()
+
+# import years and set years to numeric for evaluation
 years = results.columns[8:] # Selecting all columns from the year 2015 onwards up to 2060
+years = results.columns[results.columns.str.isdigit()]
+results[years] = results[years].apply(pd.to_numeric, errors='coerce')
 
 # DEFINE TRANSPORT DEMAND DATAFRAME (Vkt)
 # for comparison of all km within the city limits of Freiburg
